@@ -1,14 +1,13 @@
 package com.example.springtemplate.controller;
 
+import com.example.springtemplate.controller.apimodel.UserId;
 import com.example.springtemplate.data.entity.User;
 import com.example.springtemplate.data.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -32,5 +31,14 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.status(200).body(users);
+    }
+
+    @GetMapping(value = "/user", consumes = "application/json")
+    public ResponseEntity<User> getAllUsers(
+            @RequestBody UserId userId
+    ) {
+        System.out.println(userId);
+        User user = userService.findUserById(UUID.fromString(userId.getUserId()));
+        return ResponseEntity.status(200).body(user);
     }
 }
